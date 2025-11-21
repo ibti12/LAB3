@@ -1,0 +1,25 @@
+# Générer un résumé global
+
+summary_data = [
+("Total Customers", float(customers.count())),
+("Total Products", float(products.count())),
+("Total Orders", float(orders.count()))
+]
+
+if orderdetails:
+# Utiliser orderdetails si disponible
+total_revenue = float(orders_full.agg(_sum("priceEach")).collect()[0][0])
+avg_order_value = float(
+orders_full.groupBy("orderNumber").agg(_sum("priceEach").alias("orderValue"))
+.agg(avg("orderValue")).collect()[0][0]
+)
+else:
+# Utiliser totalAmount d'orders.csv si orderdetails manquant
+total_revenue = float(orders.agg(_sum("totalAmount")).collect()[0][0])
+avg_order_value = float(orders.agg(avg("totalAmount")).collect()[0][0])
+
+summary_data.append(("Total Revenue", total_revenue))
+summary_data.append(("Average Order Value", avg_order_value))
+
+summary_df = spark.createDataFrame(summary_data, ["Metric", "Value"])
+summary_df.show()

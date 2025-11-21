@@ -1,0 +1,230 @@
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+25/11/21 14:59:03 WARN Utils: Service 'SparkUI' could not bind on port 4040. Attempting port 4041.
+
+[Stage 1:>                                                          (0 + 1) / 1]
+
+                                                                                
+================================================================================
+LAB 1.2: E-COMMERCE DATA EXPLORATION
+================================================================================
+
+[1] Creating SparkSession...
+[OK] SparkSession created successfully
+
+[2] Loading CSV datasets...
+[OK] Loaded customers.csv
+[OK] Loaded products.csv
+[OK] Loaded orders.csv
+
+[3] Inspecting schemas...
+
+--- CUSTOMERS Schema ---
+root
+ |-- customerNumber: integer (nullable = true)
+ |-- customerName: string (nullable = true)
+ |-- contactFirstName: string (nullable = true)
+ |-- contactLastName: string (nullable = true)
+ |-- phone: string (nullable = true)
+ |-- addressLine1: string (nullable = true)
+ |-- city: string (nullable = true)
+ |-- state: string (nullable = true)
+ |-- country: string (nullable = true)
+ |-- creditLimit: double (nullable = true)
+ |-- customerSegment: string (nullable = true)
+
+
+--- PRODUCTS Schema ---
+root
+ |-- productCode: string (nullable = true)
+ |-- productName: string (nullable = true)
+ |-- productCategory: string (nullable = true)
+ |-- quantityInStock: integer (nullable = true)
+ |-- buyPrice: double (nullable = true)
+ |-- MSRP: double (nullable = true)
+
+
+--- ORDERS Schema ---
+root
+ |-- orderNumber: integer (nullable = true)
+ |-- orderDate: date (nullable = true)
+ |-- requiredDate: date (nullable = true)
+ |-- status: string (nullable = true)
+ |-- customerNumber: integer (nullable = true)
+ |-- totalAmount: double (nullable = true)
+ |-- paymentMethod: string (nullable = true)
+
+
+[4] Computing basic statistics...
+Total number of customers: 1000
+Total number of products: 100
+Total number of orders: 5000
+
+[5] Data preview (first 5 rows)...
+
+--- CUSTOMERS ---
++--------------+-------------------------------+----------------+---------------+---------------------+-------------------------------+-------------+-----+-------------------------+-----------+---------------+
+|customerNumber|customerName                   |contactFirstName|contactLastName|phone                |addressLine1                   |city         |state|country                  |creditLimit|customerSegment|
++--------------+-------------------------------+----------------+---------------+---------------------+-------------------------------+-------------+-----+-------------------------+-----------+---------------+
+|1             |Rodriguez, Figueroa and Sanchez|Donald          |Garcia         |001-581-896-0013x3890|9402 Peterson Drives           |Port Matthew |CO   |Hong Kong                |65745.55   |Enterprise     |
+|2             |Howard LLC                     |Cassandra       |Roman          |001-278-516-1849x5931|31647 Martin Knoll Apt. 419    |New Jessica  |GA   |Kyrgyz Republic          |75447.3    |SMB            |
+|3             |Nelson-Schaefer                |Hailey          |Robinson       |903-405-6413x95376   |38849 Hurst Locks Suite 328    |Daviston     |VI   |Bouvet Island (Bouvetoya)|26205.02   |Enterprise     |
+|4             |Burton Ltd                     |Robert          |Brown          |(897)484-8018x4514   |48281 Skinner Parkways Apt. 252|New Mariotown|DE   |Vanuatu                  |69286.45   |Enterprise     |
+|5             |Koch-Decker                    |Kyle            |Brown          |001-411-671-8227     |83465 Lam Mission Apt. 331     |Andrewside   |IN   |Namibia                  |61096.79   |Enterprise     |
++--------------+-------------------------------+----------------+---------------+---------------------+-------------------------------+-------------+-----+-------------------------+-----------+---------------+
+only showing top 5 rows
+
+
+--- PRODUCTS ---
++-----------+------------------------------------+---------------+---------------+--------+-------+
+|productCode|productName                         |productCategory|quantityInStock|buyPrice|MSRP   |
++-----------+------------------------------------+---------------+---------------+--------+-------+
+|PROD0001   |Secured bifurcated middleware       |Books          |326            |124.74  |298.29 |
+|PROD0002   |Virtual mission-critical frame      |Home & Garden  |242            |292.96  |645.77 |
+|PROD0003   |Automated fresh-thinking algorithm  |Toys           |533            |157.86  |218.83 |
+|PROD0004   |Customizable disintermediate success|Electronics    |570            |118.31  |188.19 |
+|PROD0005   |Expanded zero tolerance complexity  |Clothing       |641            |474.77  |1112.68|
++-----------+------------------------------------+---------------+---------------+--------+-------+
+only showing top 5 rows
+
+
+--- ORDERS ---
++-----------+----------+------------+---------+--------------+-----------+-------------+
+|orderNumber|orderDate |requiredDate|status   |customerNumber|totalAmount|paymentMethod|
++-----------+----------+------------+---------+--------------+-----------+-------------+
+|1          |2024-07-10|2024-07-13  |Delivered|719           |4482.73    |Credit Card  |
+|2          |2023-04-22|2023-04-28  |Delivered|171           |3252.65    |Credit Card  |
+|3          |2024-07-30|2024-08-12  |Cancelled|991           |3775.78    |Debit Card   |
+|4          |2023-04-19|2023-04-22  |Shipped  |265           |1148.91    |PayPal       |
+|5          |2024-04-01|2024-04-09  |Cancelled|475           |3873.09    |PayPal       |
++-----------+----------+------------+---------+--------------+-----------+-------------+
+only showing top 5 rows
+
+
+[6] Data quality checks...
+
+--- NULL VALUES in CUSTOMERS ---
+-RECORD 0---------------
+ customerNumber   | 0   
+ customerName     | 0   
+ contactFirstName | 0   
+ contactLastName  | 0   
+ phone            | 0   
+ addressLine1     | 0   
+ city             | 0   
+ state            | 0   
+ country          | 0   
+ creditLimit      | 0   
+ customerSegment  | 0   
+
+
+--- NULL VALUES in ORDERS ---
+-RECORD 0-------------
+ orderNumber    | 0   
+ orderDate      | 0   
+ requiredDate   | 0   
+ status         | 0   
+ customerNumber | 0   
+ totalAmount    | 0   
+ paymentMethod  | 0   
+
+
+--- DUPLICATE CHECKS ---
+Customer duplicates: 0
+Order duplicates: 0
+
+[7] Exploratory analysis...
+
+--- Customers by Segment ---
++---------------+-----+
+|customerSegment|count|
++---------------+-----+
+|     Individual|  266|
+|        Startup|  255|
+|     Enterprise|  240|
+|            SMB|  239|
++---------------+-----+
+
+
+--- Top 10 Countries by Customer Count ---
++--------------------+-----+
+|             country|count|
++--------------------+-----+
+|               Tonga|   11|
+|            Botswana|   11|
+|               Nauru|   10|
+|      Cayman Islands|   10|
+|             Iceland|    9|
+|              Brazil|    9|
+|Antarctica (the t...|    9|
+|               Korea|    9|
+|           Swaziland|    9|
+|             Namibia|    8|
++--------------------+-----+
+only showing top 10 rows
+
+
+--- Orders by Status ---
++----------+-----+
+|    status|count|
++----------+-----+
+| Cancelled| 1046|
+|Processing| 1012|
+| Delivered| 1001|
+|   Pending|  972|
+|   Shipped|  969|
++----------+-----+
+
+
+--- Orders by Payment Method ---
++-------------+-----+
+|paymentMethod|count|
++-------------+-----+
+|  Credit Card| 1309|
+|   Debit Card| 1286|
+|       PayPal| 1229|
+|Bank Transfer| 1176|
++-------------+-----+
+
+
+--- Products by Category ---
++---------------+-----+
+|productCategory|count|
++---------------+-----+
+|       Clothing|   24|
+|    Electronics|   19|
+|         Sports|   17|
+|           Toys|   14|
+|          Books|   13|
+|  Home & Garden|   13|
++---------------+-----+
+
+
+[8] Numerical analysis...
+
+--- Order Amount Statistics ---
++-----------+----------+----------+----------+-------------+
+|order_count|min_amount|max_amount|avg_amount|total_revenue|
++-----------+----------+----------+----------+-------------+
+|       5000|      50.3|   4997.18|   2509.98|1.254990094E7|
++-----------+----------+----------+----------+-------------+
+
+
+--- Credit Limit Statistics by Segment ---
++---------------+-----+----------+----------+
+|customerSegment|count|avg_credit|max_credit|
++---------------+-----+----------+----------+
+|        Startup|  255|  55419.02|  99991.24|
+|     Enterprise|  240|  54377.25|  99755.46|
+|            SMB|  239|  52636.67|  99143.67|
+|     Individual|  266|  52063.53|  99961.53|
++---------------+-----+----------+----------+
+
+
+--- Product Price Statistics ---
++------------+------------+------------+--------+--------+--------+
+|min_buyPrice|max_buyPrice|avg_buyPrice|min_MSRP|max_MSRP|avg_MSRP|
++------------+------------+------------+--------+--------+--------+
+|       12.55|      484.77|      267.05|   20.09| 1112.68|  500.21|
++------------+------------+------------+--------+--------+--------+
+
